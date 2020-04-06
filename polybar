@@ -1,0 +1,151 @@
+[colors]
+background = #04040e
+background-alt = #2e3133
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[settings]
+screenchange-reload = true
+
+[bar/root]
+monitor = ${env:MONITOR:eDP1}
+height = 25
+bottom = false
+offset-y = 7
+radius = 10.0
+override-redirect = true
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+module-margin-left = 0
+module-margin-right = 0
+
+font-0 = JetBrains Mono:pixelsize=10;2
+font-1 = FontAwesome:pixelsize=10;2
+font-2 = DejaVu Sans:pixelsize=10;2
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[bar/workspaces]
+inherit = bar/root
+width = 261
+offset-x = 7
+
+modules-left = workspaces
+
+[bar/battery]
+inherit = bar/root
+width = 73
+offset-x = 100%:-80
+
+modules-center = battery
+
+[module/workspaces]
+type = internal/xworkspaces
+
+icon-0 = 1;
+icon-1 = 2;
+icon-2 = 3;
+icon-3 = 4;
+icon-4 = 5;
+icon-5 = 6;
+icon-6 = 7;
+icon-7 = 8;
+icon-8 = "9; "
+
+enable-scroll = false
+
+label-active = " %icon% "
+label-active-background = #00000000
+
+label-occupied = " %icon% "
+label-urgent = " %icon% "
+label-empty = " %icon% "
+
+[module/battery]
+type = internal/battery
+
+format-full = <label-full>
+format-charging = <label-charging>
+format-discharging = <label-discharging>
+label-full = " %percentage%%"
+label-charging = " %percentage%%"
+label-discharging = " %percentage%%"
+
+[bar/volume]
+inherit = bar/root
+width = 68
+offset-x = 100%:-155
+
+modules-center = volume
+
+[module/volume]
+type = internal/alsa
+label-volume =  %percentage%%
+label-muted =  %percentage%%
+
+[bar/time]
+inherit = bar/root
+width = 68
+offset-x = 100%:-230
+
+modules-center = time
+
+[module/time]
+type = internal/date
+time = %H:%M
+label = %time%
+
+[bar/date]
+inherit = bar/root
+width = 68
+offset-x = 100%:-305
+
+modules-center = date
+
+[module/date]
+type = internal/date
+date = %d.%m
+label = %date%
+
+# 75
+
+[bar/keyboard]
+inherit = bar/root
+width = 40
+offset-x = 100%:-352
+
+modules-center = keyboard
+
+[module/keyboard]
+type = internal/xkeyboard
+
+format = <label-layout>
+
+label-layout = %icon%
+layout-icon-0 = ru;RU
+layout-icon-1 = us;US
+
+[bar/music]
+inherit = bar/root
+width = 33%
+offset-x = 33%
+override-redirect = true
+background = #00000000
+foreground = ${colors.foreground}
+
+font-0 = JetBrains Mono:style=Bold:pixelsize=10;2
+
+modules-center = cmus
+
+[module/cmus]
+type = custom/script
+
+exec = "cmus-remote -C status 2>&1 | grep -P "^tag title" | sed -z -e 's/tag title//' && echo"
+click-left = cmus-remote --pause
+
+interval = 0.5

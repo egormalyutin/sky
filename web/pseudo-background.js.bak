@@ -1,0 +1,66 @@
+// ==UserScript==
+// @name         Pseudo Discord
+// @namespace    https://discordapp.com/
+// @version      0.1
+// @description  Pseudo Discord
+// @author       Me
+// @match        https://discordapp.com/*
+// @grant        http://localhost:8080/bg.png
+// ==/UserScript==
+
+(function() {
+	"use strict";
+
+	const ox = 66
+	const oy = -6
+	const bg = "http://localhost:8080/bg.png"
+
+	const installPseudoBackground = (sel) => {
+		let x = 0;
+		let y = 0;
+		let elem;
+
+		const listener = () => {
+			if (!elem) {
+				elem = document.querySelector(sel);
+				if (!elem) return;
+			}
+
+			elem.style.background = `url(${bg})`;
+
+			const b = elem.getBoundingClientRect();
+			const gx = b.left + ox + x;
+			const gy = b.top + oy + y;
+			elem.style.backgroundPosition = `${-gx}px ${-gy}px`;
+			console.log(gx, gy);
+		};
+
+		setInterval(() => {
+			if (window.screenX == x && window.screenY == y) return;
+			x = window.screenX;
+			y = window.screenY;
+			listener();
+		}, 100);
+	};
+
+	const installStyle = (css) => {
+		const elem = document.createElement("style")
+		elem.innerText = css
+		document.head.appendChild(elem)
+	}
+
+	installPseudoBackground('[class*="messages-"]')
+	installPseudoBackground('[class*="chatContent-"]')
+	installPseudoBackground('[class*="members-"]')
+	installPseudoBackground('[class*="sidebar-"] > *')
+	installPseudoBackground('[class*="panels-"]')
+	installPseudoBackground('[class*="systemPad-"]')
+	installPseudoBackground('[class*="scrollableContainer-"]')
+	installPseudoBackground('[class*="title-"]')
+
+	installStyle(`
+[class*="chatContent-"] > form::before {
+	display: none;
+}
+`)
+})();
